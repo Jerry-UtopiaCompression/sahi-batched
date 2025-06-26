@@ -128,7 +128,8 @@ def get_prediction(
     )
     # object_prediction_list: List[ObjectPrediction] = detection_model.object_prediction_list
     object_prediction_list: List[ObjectPrediction] = detection_model.object_prediction_list_per_image
-    object_prediction_list = filter_predictions(object_prediction_list, exclude_classes_by_name, exclude_classes_by_id)
+    # Optional TODO: prediction filtering. Currently encounter error.
+    # object_prediction_list = filter_predictions(object_prediction_list, exclude_classes_by_name, exclude_classes_by_id)
 
     # postprocess matching predictions
     if postprocess is not None:
