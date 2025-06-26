@@ -283,6 +283,8 @@ def get_sliced_prediction(
         for image_ind in range(num_batch):
             # image_list.append(slice_image_result.images[group_ind * num_batch + image_ind])
             # shift_amount_list.append(slice_image_result.starting_pixels[group_ind * num_batch + image_ind])
+            if (group_ind * num_batch + image_ind) >= num_slices:
+                break
             img_slice = slice_image_result.images[group_ind * num_batch + image_ind]
             img_slice = img_slice[:,:,::-1]
             image_list.append(img_slice)
