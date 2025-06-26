@@ -4,6 +4,7 @@
 import logging
 import os
 import time
+import math
 from typing import Generator, List, Optional, Union
 
 from PIL import Image
@@ -338,7 +339,7 @@ def get_sliced_prediction(
         if len(prediction_result.object_prediction_list) != 0:
             for _predicion_result in prediction_result.object_prediction_list:
                 object_prediction_list.extend(_predicion_result)
-                
+
     # merge matching predictions
     if len(object_prediction_list) > 1:
         object_prediction_list = postprocess(object_prediction_list)
