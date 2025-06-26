@@ -98,7 +98,7 @@ class HuggingfaceDetectionModel(DetectionModel):
         self._processor = processor
         self.category_mapping = self.model.config.id2label
 
-    def perform_inference(self, image: Union[List, np.ndarray]):
+    def perform_inference(self, images: Union[List[np.ndarray], np.ndarray]):
         """
         Prediction is performed using self.model and the prediction result is set to self._original_predictions.
         Args:
@@ -111,17 +111,23 @@ class HuggingfaceDetectionModel(DetectionModel):
         if self.model is None or self.processor is None:
             raise RuntimeError("Model is not loaded, load it by calling .load_model()")
 
+        # if only one image, make it a list of 1 for batch inference
+        if isinstance(images, np.ndarray):
+            images = [images]
+        
         with torch.no_grad():
-            inputs = self.processor(images=image, return_tensors="pt")
+            inputs = self.processor(images=images, return_tensors="pt")
             inputs["pixel_values"] = inputs.pixel_values.to(self.device)
             if hasattr(inputs, "pixel_mask"):
                 inputs["pixel_mask"] = inputs.pixel_mask.to(self.device)
             outputs = self.model(**inputs)
 
-        if isinstance(image, list):
-            self._image_shapes = [img.shape for img in image]
-        else:
-            self._image_shapes = [image.shape]
+        # images is a list. Don't need to check again
+        # if isinstance(image, list):
+        #     self._image_shapes = [img.shape for img in image]
+        # else:
+        #     self._image_shapes = [image.shape]
+        self._image_shapes = [img.shape for img in images]
         self._original_predictions = outputs
 
     def get_valid_predictions(self, logits, pred_boxes) -> Tuple:
