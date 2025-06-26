@@ -281,7 +281,7 @@ def get_sliced_prediction(
         image_list = []
         shift_amount_list = []
         for image_ind in range(num_batch):
-            image_list.append(slice_image_result.images[group_ind * num_batch + image_ind])
+            # image_list.append(slice_image_result.images[group_ind * num_batch + image_ind])
             # shift_amount_list.append(slice_image_result.starting_pixels[group_ind * num_batch + image_ind])
             img_slice = slice_image_result.images[group_ind * num_batch + image_ind]
             img_slice = img_slice[:,:,::-1]
